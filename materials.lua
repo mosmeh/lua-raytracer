@@ -75,7 +75,7 @@ local function reflectance(cosine, refIdx)
     -- Use Schlick's approximation for reflectance.
     local r0 = (1 - refIdx) / (1 + refIdx)
     r0 = r0 * r0
-    return r0 + (1 - r0) * math.pow(1 - cosine, 5)
+    return r0 + (1 - r0) * (1 - cosine) ^ 5
 end
 
 function Dialectric:scatter(rIn, rec)
