@@ -111,17 +111,13 @@ local function writeColor(file, pixelColor, samplesPerPixel)
         math.floor(256 * clamp(b, 0, 0.999)), '\n')
 end
 
-local function main(args)
-    if args.seed then
-        math.randomseed(args.seed)
-    end
-
+local function main()
     -- Image
-    local aspectRatio = args.aspect_ratio
-    local imageWidth = args.width
-    local imageHeight = math.tointeger(imageWidth // aspectRatio)
-    local samplesPerPixel = args.samples
-    local maxDepth = args.max_depth
+    local aspectRatio = 1.5
+    local imageWidth = 500
+    local imageHeight = math.floor(imageWidth / aspectRatio)
+    local samplesPerPixel = 100
+    local maxDepth = 50
 
     -- World
     local world = randomScene()
@@ -142,7 +138,7 @@ local function main(args)
         focusDist = distToFocus
     }
 
-    local file = io.open(args.output, 'w')
+    local file = io.open('out.ppm', 'w')
     file:write('P3\n', imageWidth, ' ', imageHeight, '\n255\n')
 
     -- Render
@@ -165,14 +161,4 @@ local function main(args)
     file:close()
 end
 
-local parser = argparse()
-parser:help_description_margin(35)
-parser:option('--output -o', 'Output PPM filename'):default('out.ppm')
-parser:option('--width -w', 'Output image width'):default('500'):convert(math.tointeger)
-parser:option('--aspect-ratio -a', 'Width / height'):default('1.5'):convert(tonumber)
-parser:option('--samples -s', 'Number of samples per pixel'):default('100'):convert(math.tointeger)
-parser:option('--max-depth -d', 'Ray bounce limit'):default('50'):convert(math.tointeger)
-parser:option('--seed', 'Random seed'):convert(math.tointeger)
-
-local args = parser:parse()
-main(args)
+main()
