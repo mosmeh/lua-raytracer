@@ -1,5 +1,3 @@
-local Vec3 = require 'vec3'
-
 local Ray = {}
 
 function Ray:new(origin, direction)

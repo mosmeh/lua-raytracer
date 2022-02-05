@@ -12,7 +12,7 @@ function Lambertian:new(albedo)
     return o
 end
 
-function Lambertian:scatter(rIn, rec)
+function Lambertian:scatter(_, rec)
     local scatterDirection = rec.normal + Vec3:randomUnitVector()
 
     -- Catch degenerate scatter direction

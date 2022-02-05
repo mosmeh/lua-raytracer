@@ -2,7 +2,6 @@ local argparse = require 'argparse'
 
 local randomRange = require 'randomrange'
 local Vec3 = require 'vec3'
-local Ray = require 'ray'
 local Camera = require 'camera'
 local Sphere = require 'sphere'
 
@@ -152,7 +151,7 @@ local function main(args)
 
         for i = 1, imageWidth do
             local pixelColor = Vec3:zero()
-            for s = 1, samplesPerPixel do
+            for _ = 1, samplesPerPixel do
                 local u = (i - 1 + math.random()) / (imageWidth - 1)
                 local v = (j - 1 + math.random()) / (imageHeight - 1)
                 local r = cam:getRay(u, v)

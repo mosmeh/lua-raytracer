@@ -1,6 +1,3 @@
-local Vec3 = require 'vec3'
-local Lambertian = require'materials'.Lambertian
-
 local Sphere = {}
 
 function Sphere:new(center, radius, material)

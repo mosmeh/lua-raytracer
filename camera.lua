@@ -4,7 +4,7 @@ local Ray = require 'ray'
 local Camera = {}
 
 function Camera:new(options)
-    local options = options or {}
+    options = options or {}
     local lookfrom = options.lookfrom or Vec3:zero()
     local lookat = options.lookat or Vec3:new(0, 0, -1)
     local vup = options.vup or Vec3:new(0, 1, 0)
