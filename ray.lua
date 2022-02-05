@@ -1,12 +1,12 @@
 local Ray = {}
+Ray.__index = Ray
 
-function Ray:new(origin, direction)
+function Ray.new(origin, direction)
     local o = {
         origin = origin,
         direction = direction
     }
-    setmetatable(o, self)
-    self.__index = self
+    setmetatable(o, Ray)
     return o
 end
 

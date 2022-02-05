@@ -2,31 +2,32 @@ local Vec3 = require 'vec3'
 local Ray = require 'ray'
 
 local Lambertian = {}
+Lambertian.__index = Lambertian
 
-function Lambertian:new(albedo)
+function Lambertian.new(albedo)
     local o = {
         albedo = albedo
     }
-    setmetatable(o, self)
-    self.__index = self
+    setmetatable(o, Lambertian)
     return o
 end
 
 function Lambertian:scatter(_, rec)
-    local scatterDirection = rec.normal + Vec3:randomUnitVector()
+    local scatterDirection = rec.normal + Vec3.randomUnitVector()
 
     -- Catch degenerate scatter direction
     if scatterDirection:nearZero() then
         scatterDirection = rec.normal
     end
 
-    local scattered = Ray:new(rec.p, scatterDirection)
+    local scattered = Ray.new(rec.p, scatterDirection)
     return self.albedo, scattered
 end
 
 local Metal = {}
+Metal.__index = Metal
 
-function Metal:new(albedo, fuzz)
+function Metal.new(albedo, fuzz)
     local o = {
         albedo = albedo,
         fuzz = fuzz
@@ -34,8 +35,7 @@ function Metal:new(albedo, fuzz)
     if o.fuzz > 1 then
         o.fuzz = 1
     end
-    setmetatable(o, self)
-    self.__index = self
+    setmetatable(o, Metal)
     return o
 end
 
@@ -45,7 +45,7 @@ end
 
 function Metal:scatter(rIn, rec)
     local reflected = reflect(rIn.direction:normalize(), rec.normal)
-    local scattered = Ray:new(rec.p, reflected + self.fuzz * Vec3:randomUnitVector())
+    local scattered = Ray.new(rec.p, reflected + self.fuzz * Vec3.randomUnitVector())
     if scattered.direction:dot(rec.normal) > 0 then
         return self.albedo, scattered
     else
@@ -54,13 +54,13 @@ function Metal:scatter(rIn, rec)
 end
 
 local Dialectric = {}
+Dialectric.__index = Dialectric
 
-function Dialectric:new(ir)
+function Dialectric.new(ir)
     local o = {
         ir = ir -- Index of Refraction
     }
-    setmetatable(o, self)
-    self.__index = self
+    setmetatable(o, Dialectric)
     return o
 end
 
@@ -79,7 +79,7 @@ local function reflectance(cosine, refIdx)
 end
 
 function Dialectric:scatter(rIn, rec)
-    local attenuation = Vec3:new(1, 1, 1)
+    local attenuation = Vec3.new(1, 1, 1)
 
     local refractionRatio
     if rec.frontFace then
@@ -100,7 +100,7 @@ function Dialectric:scatter(rIn, rec)
         direction = refract(unitDirection, rec.normal, refractionRatio)
     end
 
-    local scattered = Ray:new(rec.p, direction)
+    local scattered = Ray.new(rec.p, direction)
 
     return attenuation, scattered
 end

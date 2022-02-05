@@ -1,13 +1,13 @@
 local Sphere = {}
+Sphere.__index = Sphere
 
-function Sphere:new(center, radius, material)
+function Sphere.new(center, radius, material)
     local o = {
         center = center,
         radius = radius,
         material = material
     }
-    setmetatable(o, self)
-    self.__index = self
+    setmetatable(o, Sphere)
     return o
 end
 

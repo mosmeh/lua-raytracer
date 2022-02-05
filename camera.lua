@@ -2,12 +2,13 @@ local Vec3 = require 'vec3'
 local Ray = require 'ray'
 
 local Camera = {}
+Camera.__index = Camera
 
-function Camera:new(options)
+function Camera.new(options)
     options = options or {}
-    local lookfrom = options.lookfrom or Vec3:zero()
-    local lookat = options.lookat or Vec3:new(0, 0, -1)
-    local vup = options.vup or Vec3:new(0, 1, 0)
+    local lookfrom = options.lookfrom or Vec3.zero()
+    local lookat = options.lookat or Vec3.new(0, 0, -1)
+    local vup = options.vup or Vec3.new(0, 1, 0)
     local vfov = options.vfov or 90 -- vertical field-of-view in degrees
     local aspectRatio = options.aspectRatio or (16 / 9)
     local aperture = options.aperture or 0
@@ -37,17 +38,15 @@ function Camera:new(options)
         w = w,
         lensRadius = aperture / 2
     }
-
-    setmetatable(o, self)
-    self.__index = self
+    setmetatable(o, Camera)
     return o
 end
 
 function Camera:getRay(s, t)
-    local rd = self.lensRadius * Vec3:randomInUnitDisk()
+    local rd = self.lensRadius * Vec3.randomInUnitDisk()
     local offset = self.u * rd.x + self.v * rd.y
 
-    return Ray:new(self.origin + offset,
+    return Ray.new(self.origin + offset,
         self.lowerLeftCorner + s * self.horizontal + t * self.vertical - self.origin - offset)
 end
 

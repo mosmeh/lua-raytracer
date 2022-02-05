@@ -29,7 +29,7 @@ end
 local function rayColor(r, world, depth)
     -- If we've exceeded the ray bounce limit, no more light is gathered.
     if depth <= 0 then
-        return Vec3:zero()
+        return Vec3.zero()
     end
 
     local rec = hit(world, r, 0.001, math.huge)
@@ -38,54 +38,54 @@ local function rayColor(r, world, depth)
         if attenuation then
             return attenuation * rayColor(scattered, world, depth - 1)
         end
-        return Vec3:zero()
+        return Vec3.zero()
     end
 
     local unitDirection = r.direction:normalize()
     local t = 0.5 * (unitDirection.y + 1)
-    return (1 - t) * Vec3:new(1, 1, 1) + t * Vec3:new(0.5, 0.7, 1.0)
+    return (1 - t) * Vec3.new(1, 1, 1) + t * Vec3.new(0.5, 0.7, 1.0)
 end
 
 local function randomScene()
     local world = {}
 
-    local groundMaterial = Lambertian:new(Vec3:new(0.5, 0.5, 0.5))
-    table.insert(world, Sphere:new(Vec3:new(0, -1000, 0), 1000, groundMaterial))
+    local groundMaterial = Lambertian.new(Vec3.new(0.5, 0.5, 0.5))
+    table.insert(world, Sphere.new(Vec3.new(0, -1000, 0), 1000, groundMaterial))
 
     for a = -11, 10 do
         for b = -11, 10 do
             local chooseMat = math.random()
-            local center = Vec3:new(a + 0.9 * math.random(), 0.2, b + 0.9 * math.random())
+            local center = Vec3.new(a + 0.9 * math.random(), 0.2, b + 0.9 * math.random())
 
-            if (center - Vec3:new(4, 0.2, 0)):length() > 0.9 then
+            if (center - Vec3.new(4, 0.2, 0)):length() > 0.9 then
                 local sphereMaterial
                 if chooseMat < 0.8 then
                     -- diffuse
-                    local albedo = Vec3:random() * Vec3:random()
-                    sphereMaterial = Lambertian:new(albedo)
+                    local albedo = Vec3.random() * Vec3.random()
+                    sphereMaterial = Lambertian.new(albedo)
                 elseif chooseMat < 0.95 then
                     -- metal
-                    local albedo = Vec3:random(0.5, 1)
+                    local albedo = Vec3.random(0.5, 1)
                     local fuzz = randomRange(0, 0.5)
-                    sphereMaterial = Metal:new(albedo, fuzz)
+                    sphereMaterial = Metal.new(albedo, fuzz)
                 else
                     -- glass
-                    sphereMaterial = Dialectric:new(1.5)
+                    sphereMaterial = Dialectric.new(1.5)
                 end
 
-                table.insert(world, Sphere:new(center, 0.2, sphereMaterial))
+                table.insert(world, Sphere.new(center, 0.2, sphereMaterial))
             end
         end
     end
 
-    local material1 = Dialectric:new(1.5)
-    table.insert(world, Sphere:new(Vec3:new(0, 1, 0), 1, material1))
+    local material1 = Dialectric.new(1.5)
+    table.insert(world, Sphere.new(Vec3.new(0, 1, 0), 1, material1))
 
-    local material2 = Lambertian:new(Vec3:new(0.4, 0.2, 0.1))
-    table.insert(world, Sphere:new(Vec3:new(-4, 1, 0), 1, material2))
+    local material2 = Lambertian.new(Vec3.new(0.4, 0.2, 0.1))
+    table.insert(world, Sphere.new(Vec3.new(-4, 1, 0), 1, material2))
 
-    local material3 = Metal:new(Vec3:new(0.7, 0.6, 0.5), 0)
-    table.insert(world, Sphere:new(Vec3:new(4, 1, 0), 1, material3))
+    local material3 = Metal.new(Vec3.new(0.7, 0.6, 0.5), 0)
+    table.insert(world, Sphere.new(Vec3.new(4, 1, 0), 1, material3))
 
     return world
 end
@@ -127,12 +127,12 @@ local function main(args)
     local world = randomScene()
 
     -- Camera
-    local lookfrom = Vec3:new(13, 2, 3)
-    local lookat = Vec3:zero()
-    local vup = Vec3:new(0, 1, 0)
+    local lookfrom = Vec3.new(13, 2, 3)
+    local lookat = Vec3.zero()
+    local vup = Vec3.new(0, 1, 0)
     local distToFocus = 10
     local aperture = 0.1
-    local cam = Camera:new{
+    local cam = Camera.new {
         lookfrom = lookfrom,
         lookat = lookat,
         vup = vup,
@@ -150,7 +150,7 @@ local function main(args)
         print('Scanlines remaining:', j)
 
         for i = 1, imageWidth do
-            local pixelColor = Vec3:zero()
+            local pixelColor = Vec3.zero()
             for _ = 1, samplesPerPixel do
                 local u = (i - 1 + math.random()) / (imageWidth - 1)
                 local v = (j - 1 + math.random()) / (imageHeight - 1)
